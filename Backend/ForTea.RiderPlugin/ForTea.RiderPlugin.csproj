@@ -1,17 +1,107 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project Sdk="Microsoft.NET.Sdk">
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  
+  <!--  Dotnet-Products build -->
+  <PropertyGroup Condition="Exists('ManagedProject.Generated.Targets')">
+    <DotProducts>true</DotProducts>
+  </PropertyGroup>
+  <Target Name="Build" Condition="$(DotProducts)" />
+
+  <!--  Independent build -->
+  <PropertyGroup Condition="!Exists('ManagedProject.Generated.Targets')">
+    <DotProducts>false</DotProducts>
+    <LangVersion>latest</LangVersion>
+    <OutputPath>..\output\ForTea.RiderPlugin\$(Configuration)</OutputPath>
+  </PropertyGroup>
+  <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" Condition="!$(DotProducts)" />
+
   <PropertyGroup>
-    <TargetFramework>net461</TargetFramework>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <OutputType>Library</OutputType>
+    <AssemblyName>JetBrains.ForTea.RiderPlugin</AssemblyName>
     <DefineConstants>$(DefineConstants);JET_MODE_ASSERT;RIDER</DefineConstants>
-    <OutputPath>..\output\ForTea.RiderPlugin\$(Configuration)</OutputPath>
-    <LangVersion>latest</LangVersion>
     <RootNamespace>JetBrains.ForTea.RiderPlugin</RootNamespace>
+    <ProjectGuid>{7A8209AE-F03D-4557-B394-4018B149758A}</ProjectGuid>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Configuration Condition=" '$(Configuration)' == '' ">Default</Configuration>
   </PropertyGroup>
-  <Import Project="$(DotNetSdkPath)\Build\SubplatformReference.ReSharperAutomationTools_src_ReSharperHost.Props" Condition="Exists('$(DotNetSdkPath)\Build\SubplatformReference.ReSharperAutomationTools_src_ReSharperHost.Props')" />
+
+  <ItemGroup>
+    <Compile Include="**\.cs" />
+    <Compile Include="TemplateProcessing\CodeGeneration\Converters\T4CSharpRealIntermediateConverter.cs" />
+    <Compile Include="TemplateProcessing\CodeGeneration\Converters\T4CSharpExecutableIntermediateConverter.cs" />
+    <Compile Include="TemplateProcessing\CodeGeneration\Reference\Impl\T4ReferenceExtractionManager.cs" />
+    <Compile Include="TemplateProcessing\CodeGeneration\Reference\Impl\T4LowLevelReferenceExtractionManager.cs" />
+    <Compile Include="TemplateProcessing\CodeGeneration\Reference\IT4LowLevelReferenceExtractionManager.cs" />
+    <Compile Include="TemplateProcessing\CodeGeneration\Reference\IT4ReferenceExtractionManager.cs" />
+    <Compile Include="TemplateProcessing\CodeGeneration\T4RiderCodeGeneration.cs" />
+    <Compile Include="TemplateProcessing\Managing\Impl\T4BasicOutputFileRefresher.cs" />
+    <Compile Include="TemplateProcessing\Managing\Impl\T4TemplateCompiler.cs" />
+    <Compile Include="TemplateProcessing\Managing\Impl\T4TargetFileManager.cs" />
+    <Compile Include="TemplateProcessing\Managing\Impl\T4BuildMessageConverter.cs" />
+    <Compile Include="TemplateProcessing\Managing\IT4TemplateCompiler.cs" />
+    <Compile Include="TemplateProcessing\Managing\IT4TargetFileManager.cs" />
+    <Compile Include="TemplateProcessing\Managing\IT4OutputFileRefresher.cs" />
+    <Compile Include="TemplateProcessing\Managing\IT4BuildMessageConverter.cs" />
+    <Compile Include="TemplateProcessing\Services\Impl\T4ProjectModelTemplateMetadataManager.cs" />
+    <Compile Include="TemplateProcessing\Services\Impl\T4TemplatePreprocessingManager.cs" />
+    <Compile Include="TemplateProcessing\Services\T4ProjectFilePropertiesRequest.cs" />
+    <Compile Include="TemplateProcessing\Services\IT4ProjectModelTemplateMetadataManager.cs" />
+    <Compile Include="TemplateProcessing\Services\IT4TemplatePreprocessingManager.cs" />
+    <Compile Include="Resources\T4TemplateExecutionNameBundle.cs" />
+    <Compile Include="Resources\T4ActionIdBundle.cs" />
+    <Compile Include="Resources\T4StatisticIdBundle.cs" />
+    <Compile Include="Features\Folding\T4CodeFoldingProcessor.cs" />
+    <Compile Include="Features\Folding\T4CodeFoldingProcessorFactory.cs" />
+    <Compile Include="Features\Folding\T4CodeFoldingAttributes.cs" />
+    <Compile Include="ProtocolAware\Impl\T4ModelInteractionHelper.cs" />
+    <Compile Include="ProtocolAware\Impl\T4TemplateExecutionManager.cs" />
+    <Compile Include="ProtocolAware\Impl\T4ProtocolModelManager.cs" />
+    <Compile Include="ProtocolAware\Impl\T4HostOutputFileRefresher.cs" />
+    <Compile Include="ProtocolAware\Highlighting\Impl\T4OutputExtensionFrontendNotifier.cs" />
+    <Compile Include="ProtocolAware\Highlighting\Impl\T4OutputExtensionChangeListenerEx.cs" />
+    <Compile Include="ProtocolAware\Highlighting\Impl\T4OutputExtensionChangeListener.cs" />
+    <Compile Include="ProtocolAware\Highlighting\T4RiderSyntaxHighlightingHost.cs" />
+    <Compile Include="ProtocolAware\RunMarkers\T4RunMarkerAttributeIds.cs" />
+    <Compile Include="ProtocolAware\RunMarkers\T4FileRunMarkerGutterMark.cs" />
+    <Compile Include="ProtocolAware\RunMarkers\T4RunMarkerProvider.cs" />
+    <Compile Include="ProtocolAware\RunMarkers\T4RunMarkerHighlighting.cs" />
+    <Compile Include="ProtocolAware\Action\T4ExecuteTemplateActionBase.cs" />
+    <Compile Include="ProtocolAware\Action\T4ExecuteTemplateActions.cs" />
+    <Compile Include="ProtocolAware\Action\T4PreprocessTemplateAction.cs" />
+    <Compile Include="ProtocolAware\Action\T4FileBasedActionBase.cs" />
+    <Compile Include="ProtocolAware\TestFramework\T4TestHost.cs" />
+    <Compile Include="ProtocolAware\TestFramework\ZoneMarker.cs" />
+    <Compile Include="ProtocolAware\Tool\T4InternalGenerator.cs" />
+    <Compile Include="ProtocolAware\IT4ModelInteractionHelper.cs" />
+    <Compile Include="ProtocolAware\IT4TemplateExecutionManager.cs" />
+    <Compile Include="ProtocolAware\ZoneMarker.cs" />
+    <Compile Include="Daemon\Attributes\T4RiderHighlightingAttributeIdRegistrations.cs" />
+    <Compile Include="Daemon\Syntax\T4RiderSyntaxHighlightingManager.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Debugger\T4BreakpointVariantsProvider.cs" />
+    <Compile Include="Psi\Resolve\Macros\Impl\T4RiderMacroResolver.cs" />
+    <Compile Include="Psi\Resolve\Macros\Impl\T4LightMacroResolver.cs" />
+    <Compile Include="Psi\Resolve\Macros\FeatureAware\T4RiderFeatureAwareMacroResolver.cs" />
+    <Compile Include="Psi\Resolve\Macros\FeatureAware\T4FeatureAwareLightMacroResolver.cs" />
+    <Compile Include="Psi\Resolve\Macros\FeatureAware\ZoneMarker.cs" />
+    <Compile Include="Psi\Resolve\Macros\IT4LightMacroResolver.cs" />
+    <Compile Include="Psi\Resolve\Macros\T4MSBuildProjectUtil.cs" />
+    <Compile Include="Psi\Assemblies\Impl\T4LightWeightAssemblyReferenceResolver.cs" />
+    <Compile Include="ZoneMarker.cs" />
+    <Compile Include="T4RiderEnvironment.cs" />
+  </ItemGroup>
+  
   <ItemGroup>
     <ProjectReference Include="..\ForTea.Core\ForTea.Core.csproj" />
     <ProjectReference Include="..\JetBrains.TextTemplating\JetBrains.TextTemplating.csproj" />
   </ItemGroup>
+
+  <!--  Independent build -->
+  <Import Project="$(DotNetSdkPath)\Build\SubplatformReference.ReSharperAutomationTools_src_ReSharperHost.Props" Condition="!$(DotProducts)"/>
+
+  <!--  Dotnet-Products build -->
+  <Import Project="ManagedProject.Generated.Targets" Condition="$(DotProducts)"/>
+  
 </Project>

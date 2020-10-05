@@ -1,21 +1,76 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  
+  <!--  Dotnet-Products build -->
+  <PropertyGroup Condition="Exists('ManagedProject.Generated.Targets')">
+    <DotProducts>true</DotProducts>
+  </PropertyGroup>
+  <Target Name="Build" Condition="$(DotProducts)" />
 
-  <PropertyGroup>
-    <TargetFramework>net461</TargetFramework>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <DefineConstants>$(DefineConstants);JET_MODE_ASSERT</DefineConstants>
+  <!--  Independent build -->
+  <PropertyGroup Condition="!Exists('ManagedProject.Generated.Targets')">
+    <DotProducts>false</DotProducts>
     <OutputPath>..\output\ForTea.ReSharperPlugin\$(Configuration)</OutputPath>
     <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+  <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" Condition="!$(DotProducts)" />
+  
+  <PropertyGroup>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <OutputType>Library</OutputType>
+    <AssemblyName>JetBrains.ForTea.ReSharperPlugin</AssemblyName>
+    <DefineConstants>$(DefineConstants);JET_MODE_ASSERT</DefineConstants>
     <RootNamespace>JetBrains.ForTea.ReSharperPlugin</RootNamespace>
+    <ProjectGuid>{91752C42-6763-4001-B888-5B557AACD558}</ProjectGuid>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Configuration Condition=" '$(Configuration)' == '' ">Default</Configuration>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="**\.cs" />
+    <Compile Include="Daemon\Stages\T4CSharpHighlightingStage.cs" />
+    <Compile Include="Daemon\Stages\T4HighlightingStage.cs" />
+    <Compile Include="Daemon\Highlightings\PredefinedHighlighterIds.cs" />
+    <Compile Include="Daemon\Processes\T4CSharpHighlightingProcess.cs" />
+    <Compile Include="Daemon\Processes\T4HighlightingProcess.cs" />
+    <Compile Include="Daemon\Attributes\T4MefDefinitions.cs" />
+    <Compile Include="Daemon\Attributes\T4ReSharperHighlightingAttributeIdRegistrations.cs" />
+    <Compile Include="Daemon\Syntax\T4ReSharperSyntaxHighlightProcessor.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Psi\Resolve\Utils\T4UnsafeMarshallers.cs" />
+    <Compile Include="Psi\Resolve\Assemblies\Impl\T4LightWeightAssemblyResolutionDataMarshaller.cs" />
+    <Compile Include="Psi\Resolve\Assemblies\Impl\T4LightWeightAssemblyResolutionRequest.cs" />
+    <Compile Include="Psi\Resolve\Assemblies\Impl\T4ReSharperAssemblyReferenceResolver.cs" />
+    <Compile Include="Psi\Resolve\Assemblies\Impl\T4LightWeightAssemblyResolutionData.cs" />
+    <Compile Include="Psi\Resolve\Assemblies\Impl\T4LightWeightAssemblyReferenceResolver.cs" />
+    <Compile Include="Psi\Resolve\Assemblies\Impl\T4LightWeightAssemblyResolutionCache.cs" />
+    <Compile Include="Psi\Resolve\Macros\T4MacroResolutionData.cs" />
+    <Compile Include="Psi\Resolve\Macros\T4MacroResolutionRequest.cs" />
+    <Compile Include="Psi\Resolve\Macros\T4MacroResolutionCache.cs" />
+    <Compile Include="Psi\Resolve\Macros\T4MacroResolutionDataMarshaller.cs" />
+    <Compile Include="Psi\Resolve\T4ResolutionUtils.cs" />
+    <Compile Include="T4ReSharperMacroResolver.cs" />
+    <Compile Include="T4ReSharperEnvironment.cs" />
+    <Compile Include="ZoneMarker.cs" />
+    <Compile Include="VsVersions.cs" />
+    <Compile Include="ExposeTextTemplatingEngineHostService.cs" />
+  </ItemGroup>
+  
+  <ItemGroup Condition="!$(DotProducts)">
     <PackageReference Include="Microsoft.VisualStudio.Text.UI.Wpf" Version="10.0.189-g83e7c53a57" />
     <PackageReference Include="Microsoft.VisualStudio.TextTemplating.Interfaces.10.0" Version="10.0.30320" />
     <PackageReference Include="Microsoft.VisualStudio.Shell.Interop.8.0" Version="8.0.50728" />
+  </ItemGroup>
+  
+  <ItemGroup>
     <Reference Include="PresentationCore" />
     <ProjectReference Include="..\ForTea.Core\ForTea.Core.csproj" />
   </ItemGroup>
-  <Import Project="$(DotNetSdkPath)\Build\SubplatformReference.Psi.Features_src.Props" Condition="Exists('$(DotNetSdkPath)\Build\SubplatformReference.Psi.Features_src.Props')"/>
-  <Import Project="$(DotNetSdkPath)\Build\SubplatformReference.Platform_VisualStudio.Props" Condition="Exists('$(DotNetSdkPath)\Build\SubplatformReference.Platform_VisualStudio.Props')"/>
+  
+  <!--  Independent build -->
+  <Import Project="$(DotNetSdkPath)\Build\SubplatformReference.Psi.Features_src.Props" Condition="!$(DotProducts)" />
+  <Import Project="$(DotNetSdkPath)\Build\SubplatformReference.Platform_VisualStudio.Props" Condition="!$(DotProducts)" />
+
+  <!--  Dotnet-Products build -->
+  <Import Project="ManagedProject.Generated.Targets" Condition="$(DotProducts)" />
 </Project>

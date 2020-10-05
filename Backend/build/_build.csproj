@@ -1,15 +1,28 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition="Exists('ManagedProject.Generated.Targets')">
+    <DotProducts>true</DotProducts>
+  </PropertyGroup>
+  <PropertyGroup Condition="!Exists('ManagedProject.Generated.Targets')">
+    <DotProducts>false</DotProducts>
+  </PropertyGroup>
+  
+  <Target Name="Build" Condition="$(DotProducts)" />
+  <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" Condition="!$(DotProducts)" />
+  
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <RootNamespace></RootNamespace>
     <IsPackable>False</IsPackable>
     <NoWarn>CS0649;CS0169</NoWarn>
+    <AssemblyName>JetBrains.ForTea._build</AssemblyName>
+    <ProjectGuid>{9161F25B-3379-4EE9-8E91-F02CBEB2159B}</ProjectGuid>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Configuration Condition=" '$(Configuration)' == '' ">Default</Configuration>
   </PropertyGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition="!$(DotProducts)">
     <PackageReference Include="NuGet.CommandLine" Version="4.9.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
@@ -35,5 +48,37 @@
     <None Include="..\.travis.yml" Condition="Exists('..\.travis.yml')" />
     <None Include="..\GitVersion.yml" Condition="Exists('..\GitVersion.yml')" />
   </ItemGroup>
-
+  <ItemGroup>
+    <Compile Include="**\.cs" />
+    <Compile Include="ForTeaBuild.cs" />
+  </ItemGroup>
+  
+  <ItemGroup Condition="$(DotProducts)">
+    <Reference Include="JetBrains.Annotations, Version=2020.1.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325">
+      <HintPath>..\..\..\..\Packages\JetBrains.Annotations.2020.1.0\lib\net20\JetBrains.Annotations.dll</HintPath>
+    </Reference>
+    <Reference Include="JetBrains.Lifetimes, Version=777.0.0.0, Culture=neutral, PublicKeyToken=3c74c1a6a8683340">
+      <HintPath>..\..\..\..\Packages\JetBrains.Lifetimes.2020.3.0-preview416\lib\net461\JetBrains.Lifetimes.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Build" />
+    <Reference Include="mscorlib">
+      <HintPath>..\..\..\..\Obj/Obj.Plugins/Toolset.Prj/MNETFRRE.ASS/build/.NETFramework/v4.6.1/mscorlib.dll</HintPath>
+    </Reference>
+    <Reference Include="NuGet, Version=4.9.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+      <HintPath>..\..\..\..\..\..\.local\share\JetBrains\Transient\Shared\vAny\NugetLocalRestore\NuGet.CommandLine.4.9.4\tools\NuGet.exe</HintPath>
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </Reference>
+    <Reference Include="Nuke.Common, Version=0.23.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\..\..\..\..\.local\share\JetBrains\Transient\Shared\vAny\NugetLocalRestore\Nuke.Common.0.23.4\lib\net472\Nuke.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="System">
+      <Name>System</Name>
+    </Reference>
+    <Reference Include="System.Core" />
+    <Reference Include="System.Linq" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.ComponentModel" />
+  </ItemGroup>
+  <Import Project="ManagedProject.Generated.Targets" Condition="$(DotProducts)"/>
 </Project>

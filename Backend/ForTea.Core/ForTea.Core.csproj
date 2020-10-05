@@ -1,17 +1,39 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  
+  <!-- Dotnet-Products build -->
+  <PropertyGroup Condition="Exists('ManagedProject.Generated.Targets')">
+    <DotProducts>true</DotProducts>
+  </PropertyGroup>
+  <Target Name="Build" Condition="$(DotProducts)" />
+
+  <!-- Independent build -->
+  <PropertyGroup Condition="!Exists('ManagedProject.Generated.Targets')">
+    <DotProducts>false</DotProducts>
+    <LangVersion>latest</LangVersion>
+    <OutputPath>..\output\ForTea.Core\$(Configuration)</OutputPath>
+  </PropertyGroup>
+  <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" Condition="!$(DotProducts)" />
+
+  <!-- Common -->
   <PropertyGroup>
-    <TargetFramework>net461</TargetFramework>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <DefineConstants>$(DefineConstants);JET_MODE_ASSERT</DefineConstants>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <OutputPath>..\output\ForTea.Core\$(Configuration)</OutputPath>
-    <LangVersion>latest</LangVersion>
+    <OutputType>Library</OutputType>
+    <AssemblyName>JetBrains.ForTea.Core</AssemblyName>
     <RootNamespace>GammaJul.ForTea.Core</RootNamespace>
+    <ProjectGuid>{25D5E279-923F-40CC-BEC2-33A7A8CBAA0F}</ProjectGuid>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Configuration Condition=" '$(Configuration)' == '' ">Default</Configuration>
   </PropertyGroup>
-  <Import Project="$(DotNetSdkPath)\Build\SubplatformReference.Psi.Features_src.Props" Condition="Exists('$(DotNetSdkPath)\Build\SubplatformReference.Psi.Features_src.Props')" />
-  <Import Project="$(DotNetSdkPath)\Build\SubplatformReference.Psi.Features_Web_Core.Props" Condition="Exists('$(DotNetSdkPath)\Build\SubplatformReference.Psi.Features_Web_Core.Props')" />
-
+  
+  <ItemGroup Condition="$(DotProducts)">
+    <Reference Include="JetBrains.Annotations, Version=2020.1.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325">
+      <HintPath>..\..\..\..\Packages\JetBrains.Annotations.2020.1.0\lib\net20\JetBrains.Annotations.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  
   <ItemGroup>
     <Compile Remove="Resources\TemplateBaseStub.cs" />
     <Compile Remove="Resources\TemplateBaseFull.cs" />
@@ -21,7 +43,282 @@
     <Compile Remove="Resources\Host.cs" />
     <Compile Remove="Resources\AssemblyRegistering.cs" />
     <Compile Remove="Resources\ToStringInstanceHelper.cs" />
-
+    <Compile Include="Tree\Impl\T4FileBase.cs" />
+    <Compile Include="Tree\Impl\AssemblyDirective.cs" />
+    <Compile Include="Tree\Impl\T4DirectiveWithPathBase.cs" />
+    <Compile Include="Tree\Impl\IncludedFile.cs" />
+    <Compile Include="Tree\Impl\ChildRole.cs" />
+    <Compile Include="Tree\Impl\T4CompositeNodeType.cs" />
+    <Compile Include="Tree\Impl\IncludeDirective.cs" />
+    <Compile Include="Tree\Impl\T4Token.cs" />
+    <Compile Include="Tree\Impl\File.cs" />
+    <Compile Include="Tree\Impl\T4CompositeElement.cs" />
+    <Compile Include="Tree\IT4File.cs" />
+    <Compile Include="Tree\IT4IncludeDirective.cs" />
+    <Compile Include="Tree\IT4DirectiveWithPath.cs" />
+    <Compile Include="Tree\T4TreeExtensions.cs" />
+    <Compile Include="Tree\IT4FileLikeNode.cs" />
+    <Compile Include="Tree\IT4IncludedFile.cs" />
+    <Compile Include="Tree\IT4TreeNode.cs" />
+    <Compile Include="Tree\IT4AssemblyDirective.cs" />
+    <Compile Include="Tree\IT4Token.cs" />
+    <Compile Include="TemplateProcessing\CodeGeneration\Converters\ClassName\IT4GeneratedClassNameProvider.cs" />
+    <Compile Include="TemplateProcessing\CodeGeneration\Converters\ClassName\T4ExecutableClassNameProvider.cs" />
+    <Compile Include="TemplateProcessing\CodeGeneration\Converters\ClassName\T4PreprocessedClassNameProvider.cs" />
+    <Compile Include="TemplateProcessing\CodeGeneration\Converters\T4CSharpCodeBehindIntermediateConverter.cs" />
+    <Compile Include="TemplateProcessing\CodeGeneration\Converters\T4CSharpExecutableCodeBehindIntermediateConverter.cs" />
+    <Compile Include="TemplateProcessing\CodeGeneration\Converters\T4PreprocessedClassNameUtil.cs" />
+    <Compile Include="TemplateProcessing\CodeGeneration\Converters\IT4ElementAppendFormatProvider.cs" />
+    <Compile Include="TemplateProcessing\CodeGeneration\Converters\T4CSharpIntermediateConverterBase.cs" />
+    <Compile Include="TemplateProcessing\CodeGeneration\Reference\T4AssemblyReferenceInfo.cs" />
+    <Compile Include="TemplateProcessing\CodeGeneration\T4TextTemplatingFQNs.cs" />
+    <Compile Include="TemplateProcessing\CodeGeneration\T4CodeGeneration.cs" />
+    <Compile Include="TemplateProcessing\CodeGeneration\T4CSharpCodeGenerationResult.cs" />
+    <Compile Include="TemplateProcessing\CodeCollecting\Interrupt\T4OutputGenerationException.cs" />
+    <Compile Include="TemplateProcessing\CodeCollecting\Interrupt\T4CodeBehindGenerationInterrupter.cs" />
+    <Compile Include="TemplateProcessing\CodeCollecting\Interrupt\T4CodeGenerationInterrupter.cs" />
+    <Compile Include="TemplateProcessing\CodeCollecting\Interrupt\T4FailureRawData.cs" />
+    <Compile Include="TemplateProcessing\CodeCollecting\Interrupt\IT4CodeGenerationInterrupter.cs" />
+    <Compile Include="TemplateProcessing\CodeCollecting\Descriptions\T4TextDescription.cs" />
+    <Compile Include="TemplateProcessing\CodeCollecting\Descriptions\T4ImportDescription.cs" />
+    <Compile Include="TemplateProcessing\CodeCollecting\Descriptions\T4ImportWithLineDescription.cs" />
+    <Compile Include="TemplateProcessing\CodeCollecting\Descriptions\T4ExpressionDescription.cs" />
+    <Compile Include="TemplateProcessing\CodeCollecting\Descriptions\IT4AppendableElementDescription.cs" />
+    <Compile Include="TemplateProcessing\CodeCollecting\Descriptions\T4ParameterDescription.cs" />
+    <Compile Include="TemplateProcessing\CodeCollecting\Descriptions\T4CodeDescription.cs" />
+    <Compile Include="TemplateProcessing\CodeCollecting\Descriptions\T4FeatureExpressionDescription.cs" />
+    <Compile Include="TemplateProcessing\CodeCollecting\State\T4InfoCollectorSateSeenSpecialBlock.cs" />
+    <Compile Include="TemplateProcessing\CodeCollecting\State\T4InfoCollectorStateSeenFeatureAndExpressionBlock.cs" />
+    <Compile Include="TemplateProcessing\CodeCollecting\State\T4InfoCollectorStateSeenFeatureAndText.cs" />
+    <Compile Include="TemplateProcessing\CodeCollecting\State\T4InfoCollectorStateSeenFeature.cs" />
+    <Compile Include="TemplateProcessing\CodeCollecting\State\T4InfoCollectorStateSeenFeatureAndNewLine.cs" />
+    <Compile Include="TemplateProcessing\CodeCollecting\State\T4InfoCollectorStateInitial.cs" />
+    <Compile Include="TemplateProcessing\CodeCollecting\State\T4InfoCollectorStateBase.cs" />
+    <Compile Include="TemplateProcessing\CodeCollecting\State\IT4InfoCollectorState.cs" />
+    <Compile Include="TemplateProcessing\CodeCollecting\T4CSharpCodeGenerationInfoCollectorBase.cs" />
+    <Compile Include="TemplateProcessing\CodeCollecting\T4PreprocessedCSharpCodeBehindGenerationInfoCollector.cs" />
+    <Compile Include="TemplateProcessing\CodeCollecting\T4CSharpCodeGenerationIntermediateResult.cs" />
+    <Compile Include="TemplateProcessing\CodeCollecting\T4CSharpPreprocessedCodeGenerationInfoCollector.cs" />
+    <Compile Include="TemplateProcessing\CodeCollecting\T4CSharpCodeGenerationInfoCollector.cs" />
+    <Compile Include="TemplateProcessing\CodeCollecting\T4EncodingsManager.cs" />
+    <Compile Include="TemplateProcessing\CodeCollecting\T4CSharpCodeBehindGenerationInfoCollector.cs" />
+    <Compile Include="TemplateProcessing\Managing\Impl\T4TargetFileChecker.cs" />
+    <Compile Include="TemplateProcessing\Managing\IT4TargetFileChecker.cs" />
+    <Compile Include="TemplateProcessing\Services\Impl\T4TemplateKindProvider.cs" />
+    <Compile Include="TemplateProcessing\Services\Impl\T4RootTemplateKindProvider.cs" />
+    <Compile Include="TemplateProcessing\Services\T4TemplateDataManagerExtensions.cs" />
+    <Compile Include="TemplateProcessing\Services\T4TemplateManagerConstants.cs" />
+    <Compile Include="TemplateProcessing\Services\IT4RootTemplateKindProvider.cs" />
+    <Compile Include="TemplateProcessing\Services\IT4TemplateKindProvider.cs" />
+    <Compile Include="TemplateProcessing\Services\T4TemplateKind.cs" />
+    <Compile Include="TemplateProcessing\T4TemplateResourceProvider.cs" />
+    <Compile Include="TemplateProcessing\T4CSharpCodeGenerationUtils.cs" />
+    <Compile Include="Resources\Icons\T4.cs" />
+    <Compile Include="Resources\Icons\T4Entity.cs" />
+    <Compile Include="Resources\AssemblyRegistering.cs" />
+    <Compile Include="Resources\TemplateBaseFull.cs" />
+    <Compile Include="Resources\TemplateBaseStub.cs" />
+    <Compile Include="Resources\HostspecificTemplateBaseFullExecutableSuffix.cs" />
+    <Compile Include="Resources\TemplateBaseFullExecutableSuffix.cs" />
+    <Compile Include="Daemon\Tooltip\Impl\T4EnvironmentVariableTooltipProvider.cs" />
+    <Compile Include="Daemon\Tooltip\Impl\T4MacroTooltipProvider.cs" />
+    <Compile Include="Daemon\Tooltip\Impl\T4ExpandableElementTooltipProviderBase.cs" />
+    <Compile Include="Daemon\Tooltip\IT4MacroTooltipProvider.cs" />
+    <Compile Include="Daemon\Tooltip\IT4EnvironmentVariableTooltipProvider.cs" />
+    <Compile Include="Daemon\QuickFixes\Moving\T4PlaceTextBeforeFeatureQuickFix.cs" />
+    <Compile Include="Daemon\QuickFixes\Moving\PlaceBeforeFeatureQuickFixBase.cs" />
+    <Compile Include="Daemon\QuickFixes\Moving\T4PlaceStatementBeforeFeatureQuickFix.cs" />
+    <Compile Include="Daemon\QuickFixes\Removing\T4RemoveDirectiveQuickFix.cs" />
+    <Compile Include="Daemon\QuickFixes\Removing\T4RemoveBlockQuickFixBase.cs" />
+    <Compile Include="Daemon\QuickFixes\Removing\T4RemoveRedundantAssemblyDirectiveQuickFix.cs" />
+    <Compile Include="Daemon\QuickFixes\Removing\T4RemoveExpressionBlockQuickFix.cs" />
+    <Compile Include="Daemon\QuickFixes\Removing\T4RemoveRedundantIncludeQuickFix.cs" />
+    <Compile Include="Daemon\QuickFixes\T4ChangeAttributeValueQuickFix.cs" />
+    <Compile Include="Daemon\QuickFixes\ReplaceWithClrNameQuickFix.cs" />
+    <Compile Include="Daemon\QuickFixes\HotspotHelper.cs" />
+    <Compile Include="Daemon\QuickFixes\T4ReplaceWithFeatureBlockQuickFix.cs" />
+    <Compile Include="Daemon\QuickFixes\ChangeLanguageTypeQuickFix.cs" />
+    <Compile Include="Daemon\QuickFixes\CreateTransformTextMethodQuickFix.cs" />
+    <Compile Include="Daemon\Stages\T4DaemonStageBase.cs" />
+    <Compile Include="Daemon\Stages\T4IncludeAwareDaemonStage.cs" />
+    <Compile Include="Daemon\Stages\T4ProblemAnalyzerStage.cs" />
+    <Compile Include="Daemon\Stages\T4CSharpErrorStage.cs" />
+    <Compile Include="Daemon\Highlightings\SyntaxHighlightings.cs" />
+    <Compile Include="Daemon\Highlightings\T4Errors.cs" />
+    <Compile Include="Daemon\Processes\T4ProblemAnalyzerProcess.cs" />
+    <Compile Include="Daemon\Processes\T4IncludeAwareDaemonProcess.cs" />
+    <Compile Include="Daemon\Processes\T4DaemonStageProcessBase.cs" />
+    <Compile Include="Daemon\Processes\T4CSharpErrorProcess.cs" />
+    <Compile Include="Daemon\Processes\T4IncludeAwareDaemonProcessVisitor.cs" />
+    <Compile Include="Daemon\Attributes\T4HighlightingAttributeIds.cs" />
+    <Compile Include="Daemon\Attributes\T4HighlightingAttributeGroup.cs" />
+    <Compile Include="Daemon\Attributes\T4HighlightingAttributeIdRegistrations.cs" />
+    <Compile Include="Daemon\Syntax\T4SyntaxHighlightingVisitor.cs" />
+    <Compile Include="Daemon\Syntax\T4SyntaxHighlightingProcessor.cs" />
+    <Compile Include="Daemon\ProblemAnalyzers\T4TextAfterFeatureAnalyzer.cs" />
+    <Compile Include="Daemon\ProblemAnalyzers\T4InvalidAttributeValueAnalyzer.cs" />
+    <Compile Include="Daemon\ProblemAnalyzers\T4UnresolvedMacroAnalyzer.cs" />
+    <Compile Include="Daemon\ProblemAnalyzers\T4UnexpectedDirectiveAnalyzer.cs" />
+    <Compile Include="Daemon\ProblemAnalyzers\T4UnexpectedAttributeAnalyzer.cs" />
+    <Compile Include="Daemon\ProblemAnalyzers\T4EmptyBlockAnalyzer.cs" />
+    <Compile Include="Daemon\ProblemAnalyzers\T4DuplicateAssemblyDirectiveProblemAnalyzer.cs" />
+    <Compile Include="Daemon\ProblemAnalyzers\T4AttributeValueProblemAnalyzerBase.cs" />
+    <Compile Include="Daemon\ProblemAnalyzers\T4IgnoredDirectiveInPreprocessedTemplateAnalyzers.cs" />
+    <Compile Include="Daemon\ProblemAnalyzers\T4StatementAfterFeatureAnalyzer.cs" />
+    <Compile Include="Daemon\ProblemAnalyzers\T4MissingRequiredAttributeAnalyzer.cs" />
+    <Compile Include="Daemon\ProblemAnalyzers\T4NoSupportForVBAnalyzer.cs" />
+    <Compile Include="Daemon\ProblemAnalyzers\T4UnresolvedEnvironmentVariableAnalyzer.cs" />
+    <Compile Include="Daemon\ProblemAnalyzers\T4UnresolvedPathAnalyzer.cs" />
+    <Compile Include="Daemon\ProblemAnalyzers\T4IllegalCharacterAnalyzer.cs" />
+    <Compile Include="Daemon\ProblemAnalyzers\T4EscapedKeywordAnalyzer.cs" />
+    <Compile Include="Daemon\T4LanguageSpecificDaemonBehavior.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Psi\Directives\Attributes\LanguageAttributeInfo.cs" />
+    <Compile Include="Psi\Directives\Attributes\T4VisibilityDirectiveAttributeInfo.cs" />
+    <Compile Include="Psi\Directives\Attributes\EncodingDirectiveAttributeInfo.cs" />
+    <Compile Include="Psi\Directives\Attributes\BooleanDirectiveAttributeInfo.cs" />
+    <Compile Include="Psi\Directives\Attributes\EnumDirectiveAttributeInfo.cs" />
+    <Compile Include="Psi\Directives\Attributes\DirectiveAttributeInfo.cs" />
+    <Compile Include="Psi\Directives\Attributes\CultureDirectiveAttributeInfo.cs" />
+    <Compile Include="Psi\Directives\Attributes\DirectiveAttributeOptions.cs" />
+    <Compile Include="Psi\Directives\OutputDirectiveInfo.cs" />
+    <Compile Include="Psi\Directives\T4DirectiveInfoManager.cs" />
+    <Compile Include="Psi\Directives\ParameterDirectiveInfo.cs" />
+    <Compile Include="Psi\Directives\TemplateDirectiveInfo.cs" />
+    <Compile Include="Psi\Directives\AssemblyDirectiveInfo.cs" />
+    <Compile Include="Psi\Directives\IncludeDirectiveInfo.cs" />
+    <Compile Include="Psi\Directives\ImportDirectiveInfo.cs" />
+    <Compile Include="Psi\Directives\DirectiveInfo.cs" />
+    <Compile Include="Psi\Cache\Impl\T4PsiFileSelector.cs" />
+    <Compile Include="Psi\Cache\Impl\T4DependencyInvalidationExtensions.cs" />
+    <Compile Include="Psi\Cache\Impl\T4IndirectIncludeTransitiveClosureSearcher.cs" />
+    <Compile Include="Psi\Cache\Impl\T4FileDependencyCache.cs" />
+    <Compile Include="Psi\Cache\Impl\T4GraphSinkSearcher.cs" />
+    <Compile Include="Psi\Cache\Impl\T4PreprocessedTemplateFlagUtils.cs" />
+    <Compile Include="Psi\Cache\Impl\T4IncludeData.cs" />
+    <Compile Include="Psi\Cache\Impl\T4ReversedFileDependencyData.cs" />
+    <Compile Include="Psi\Cache\Impl\T4FileDependencyDataMarshaller.cs" />
+    <Compile Include="Psi\Cache\Impl\T4PreprocessedTemplateFlagInvalidator.cs" />
+    <Compile Include="Psi\Cache\Impl\T4FileDependencyData.cs" />
+    <Compile Include="Psi\Cache\Impl\T4FileDependencyInvalidator.cs" />
+    <Compile Include="Psi\Cache\IT4FileDependencyGraph.cs" />
+    <Compile Include="Psi\Cache\T4DeclaredAssembliesManager.cs" />
+    <Compile Include="Psi\Cache\T4FileInvalidationData.cs" />
+    <Compile Include="Psi\Cache\IT4FileGraphNotifier.cs" />
+    <Compile Include="Psi\Cache\T4IndirectFileChangeObserverBase.cs" />
+    <Compile Include="Psi\Cache\T4DeclaredAssemblyReferenceExtensions.cs" />
+    <Compile Include="Psi\Cache\IT4PsiFileSelector.cs" />
+    <Compile Include="Psi\Cache\T4DeclaredAssembliesInfo.cs" />
+    <Compile Include="Psi\Cache\T4PsiAwareCacheBase.cs" />
+    <Compile Include="Psi\Cache\T4DeclaredAssembliesDiff.cs" />
+    <Compile Include="Psi\Resolve\Assemblies\Impl\T4AssemblyReferenceResolver.cs" />
+    <Compile Include="Psi\Resolve\Assemblies\Impl\T4BasicLightWeightAssemblyReferenceResolver.cs" />
+    <Compile Include="Psi\Resolve\Assemblies\Impl\T4ProjectReferenceResolver.cs" />
+    <Compile Include="Psi\Resolve\Assemblies\IT4LightWeightAssemblyReferenceResolver.cs" />
+    <Compile Include="Psi\Resolve\Assemblies\IT4ProjectReferenceResolver.cs" />
+    <Compile Include="Psi\Resolve\Assemblies\IT4AssemblyReferenceResolver.cs" />
+    <Compile Include="Psi\Resolve\Macros\Impl\T4IncludeResolver.cs" />
+    <Compile Include="Psi\Resolve\Macros\Impl\T4ResolvedPath.cs" />
+    <Compile Include="Psi\Resolve\Macros\Impl\T4BasicMacroResolver.cs" />
+    <Compile Include="Psi\Resolve\Macros\IT4IncludeResolver.cs" />
+    <Compile Include="Psi\Resolve\Macros\IT4MacroResolver.cs" />
+    <Compile Include="Psi\Resolve\T4ReferenceFactory.cs" />
+    <Compile Include="Psi\Resolve\T4MacroResolveContext.cs" />
+    <Compile Include="Psi\Resolve\T4ReferenceProviderFactory.cs" />
+    <Compile Include="Psi\Resolve\T4FileReference.cs" />
+    <Compile Include="Psi\OutsideSolution\T4OutsideSolutionOccurenceProvider.cs" />
+    <Compile Include="Psi\OutsideSolution\T4OutsideSolutionSourceFileProperties.cs" />
+    <Compile Include="Psi\OutsideSolution\T4OutsideSolutionSourceFile.cs" />
+    <Compile Include="Psi\OutsideSolution\T4OutsideSolutionExtensions.cs" />
+    <Compile Include="Psi\OutsideSolution\T4OutsideSolutionSourceFileManager.cs" />
+    <Compile Include="Psi\OutsideSolution\T4OutsideSolutionNavigationProvider.cs" />
+    <Compile Include="Psi\OutsideSolution\T4OutsideSolutionOccurrence.cs" />
+    <Compile Include="Psi\OutsideSolution\T4OutsideSolutionNavigationInfo.cs" />
+    <Compile Include="Psi\Utils\T4IncludeGuard.cs" />
+    <Compile Include="Psi\FileType\T4FileExtensions.cs" />
+    <Compile Include="Psi\FileType\T4ProjectFileType.cs" />
+    <Compile Include="Psi\Properties\T4PreprocessResultProjectFileProperties.cs" />
+    <Compile Include="Psi\Properties\T4GeneratedFilePropertiesProvider.cs" />
+    <Compile Include="Psi\Formatting\SpaceTypeProviders\Impl\T4ComplexCodeBlockInnerBoundSpaceTypeProvider.cs" />
+    <Compile Include="Psi\Formatting\SpaceTypeProviders\Impl\T4ExpressionBlockInnerBoundSpaceTypeProvider.cs" />
+    <Compile Include="Psi\Formatting\SpaceTypeProviders\Impl\T4ExpressionBlockOuterBoundSpaceTypeProvider.cs" />
+    <Compile Include="Psi\Formatting\SpaceTypeProviders\IT4BlockSpaceTypeProvider.cs" />
+    <Compile Include="Psi\Formatting\SpaceTypeProviders\T4BlockInnerBoundSpaceTypeProviderBase.cs" />
+    <Compile Include="Psi\Formatting\SpaceTypeProviders\T4BlockSpaceTypeProviderBase.cs" />
+    <Compile Include="Psi\Formatting\T4CSharpCustomFormattingInfoProvider.cs" />
+    <Compile Include="Psi\Formatting\T4CSharpCustomIndentHandler.cs" />
+    <Compile Include="Psi\Service\T4LanguageService.cs" />
+    <Compile Include="Psi\Service\T4CachingLexerService.cs" />
+    <Compile Include="Psi\Service\T4ProjectFileLanguageService.cs" />
+    <Compile Include="Psi\Modules\References\Impl\T4AssemblyReferenceManager.cs" />
+    <Compile Include="Psi\Modules\References\IT4AssemblyReferenceManager.cs" />
+    <Compile Include="Psi\Modules\IT4FilePsiModule.cs" />
+    <Compile Include="Psi\Modules\T4FilePsiModule.cs" />
+    <Compile Include="Psi\Modules\T4ProjectPsiModuleProviderFilter.cs" />
+    <Compile Include="Psi\Modules\T4WriteOnlyChangeProvider.cs" />
+    <Compile Include="Psi\Modules\T4ModulePsiUtils.cs" />
+    <Compile Include="Psi\Modules\T4PsiModuleExtensions.cs" />
+    <Compile Include="Psi\Modules\T4PsiModuleProvider.cs" />
+    <Compile Include="Psi\Modules\T4ProjectPsiModuleHandler.cs" />
+    <Compile Include="Psi\Modules\T4MiscFilesProjectPsiModuleProvider.cs" />
+    <Compile Include="Psi\T4CSharpGeneratedDocumentService.cs" />
+    <Compile Include="Psi\T4PsiProjectFileProperties.cs" />
+    <Compile Include="Psi\T4Language.cs" />
+    <Compile Include="Psi\T4CSharpLanguageLevelProvider.cs" />
+    <Compile Include="Psi\T4CSharpCustomModificationHandler.cs" />
+    <Compile Include="Psi\T4ModuleReferencer.cs" />
+    <Compile Include="Psi\T4SecondaryLexingProcess.cs" />
+    <Compile Include="Parsing\Ranges\T4DocumentToTreeTranslator.cs" />
+    <Compile Include="Parsing\Ranges\T4RangeTranslatorBase.cs" />
+    <Compile Include="Parsing\Ranges\T4TreeToDocumentTranslator.cs" />
+    <Compile Include="Parsing\Ranges\T4UnsafeManualRangeTranslationUtil.cs" />
+    <Compile Include="Parsing\Ranges\T4DocumentRangeTranslator.cs" />
+    <Compile Include="Parsing\Ranges\T4FileSector.cs" />
+    <Compile Include="Parsing\Lexing\T4DelegatingLexerSelector.cs" />
+    <Compile Include="Parsing\Lexing\T4LexerGenerated.Supplement.cs" />
+    <Compile Include="Parsing\Lexing\T4DocumentLexerSelector.cs" />
+    <Compile Include="Parsing\Lexing\IT4LexerSelector.cs" />
+    <Compile Include="Parsing\T4TokenNodeTypes.cs" />
+    <Compile Include="Parsing\T4ParsingContextHelper.cs" />
+    <Compile Include="Parsing\T4Lexer.cs" />
+    <Compile Include="Parsing\T4ParsingUtils.cs" />
+    <Compile Include="Parsing\T4ElementFactory.cs" />
+    <Compile Include="Parsing\T4TokenNodeTypeIndices.cs" />
+    <Compile Include="Parsing\T4FilteringLexer.cs" />
+    <Compile Include="Parsing\ParserMessages.cs" />
+    <Compile Include="Parsing\T4MissingTokenInserter.cs" />
+    <Compile Include="Parsing\T4LexerFactory.cs" />
+    <Compile Include="Parsing\T4TokenNodeType.cs" />
+    <Compile Include="Parsing\T4Parser.cs" />
+    <Compile Include="Parsing\T4TokenNodeFlag.cs" />
+    <Compile Include="Services\TypingAssist\T4TypingAssistUtils.cs" />
+    <Compile Include="Services\TypingAssist\T4TypingAssist.cs" />
+    <Compile Include="Services\TypingAssist\T4CSharpTypingAssist.cs" />
+    <Compile Include="Services\CodeStructure\T4CSharpCodeStructureAspects.cs" />
+    <Compile Include="Services\CodeStructure\T4CSharpCodeStructureRegionEnd.cs" />
+    <Compile Include="Services\CodeStructure\T4CSharpCodeStructureRegion.cs" />
+    <Compile Include="Services\CodeStructure\T4CSharpCodeStructureNamespace.cs" />
+    <Compile Include="Services\CodeStructure\T4CodeStructureElement.cs" />
+    <Compile Include="Services\CodeStructure\T4CodeStructureDirective.cs" />
+    <Compile Include="Services\CodeStructure\T4CSharpCodeStructureProvider.cs" />
+    <Compile Include="Services\CodeStructure\T4CodeStructureRootElement.cs" />
+    <Compile Include="Services\CodeStructure\T4CSharpCodeStructureDeclaredElement.cs" />
+    <Compile Include="Services\Selection\T4CodeBehindWrappedSelection.cs" />
+    <Compile Include="Services\Selection\T4SelectEmbracingConstructProvider.cs" />
+    <Compile Include="Services\Selection\T4NodeSelection.cs" />
+    <Compile Include="Services\CodeCompletion\AutopopupInDirective.cs" />
+    <Compile Include="Services\CodeCompletion\DirectiveAttributeValueItemsProvider.cs" />
+    <Compile Include="Services\CodeCompletion\DirectiveNameItemsProvider.cs" />
+    <Compile Include="Services\CodeCompletion\CodeCompletionExtensions.cs" />
+    <Compile Include="Services\CodeCompletion\T4CodeCompletionContextProvider.cs" />
+    <Compile Include="Services\CodeCompletion\T4CodeCompletionContext.cs" />
+    <Compile Include="Services\CodeCompletion\DirectiveAttributeNameItemsProvider.cs" />
+    <Compile Include="Services\CodeCompletion\T4AutopopupSettingsKey.cs" />
+    <Compile Include="Services\T4BraceHighlighter.cs" />
+    <Compile Include="Services\T4DefaultEnvironment.cs" />
+    <Compile Include="Services\T4SpecificOwnerUtil.cs" />
+    <Compile Include="IT4Environment.cs" />
+    <Compile Include="ZoneMarker.cs" />
     <EmbeddedResource Include="Resources\TemplateBaseFull.cs" />
     <EmbeddedResource Include="Resources\TemplateBaseFullExecutableSuffix.cs" />
     <EmbeddedResource Include="Resources\HostspecificTemplateBaseFullExecutableSuffix.cs" />
@@ -85,4 +382,12 @@
       <SubType>Designer</SubType>
     </ErrorsGen>
   </ItemGroup>
+  
+  <!--  Independent build -->
+  <Import Project="$(DotNetSdkPath)\Build\SubplatformReference.Psi.Features_src.Props" Condition="!$(DotProducts)" />
+  <Import Project="$(DotNetSdkPath)\Build\SubplatformReference.Psi.Features_Web_Core.Props" Condition="!$(DotProducts)" />
+
+  <!--  Dotnet-Products build -->
+  <Import Project="ManagedProject.Generated.Targets" Condition="$(DotProducts)" />
+  
 </Project>

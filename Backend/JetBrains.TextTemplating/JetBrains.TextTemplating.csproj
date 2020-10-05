@@ -1,12 +1,48 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net461</TargetFramework>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <DefineConstants>$(DefineConstants);JET_MODE_ASSERT</DefineConstants>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <OutputPath>..\output\JetBrains.TextTemplating\$(Configuration)</OutputPath>
-    <LangVersion>latest</LangVersion>
-    <RootNamespace>Microsoft.VisualStudio.TextTemplating</RootNamespace>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  
+  <!--  Dotnet-Products build -->
+  <PropertyGroup Condition="Exists('ManagedProject.Generated.Targets')">
+    <DotProducts>true</DotProducts>
   </PropertyGroup>
+  <Target Name="Build" Condition="$(DotProducts)" />
+  
+  <!--  Independent build -->
+  <PropertyGroup Condition="!Exists('ManagedProject.Generated.Targets')">
+    <DotProducts>false</DotProducts>
+    <LangVersion>latest</LangVersion>
+    <OutputPath>..\output\JetBrains.TextTemplating\$(Configuration)</OutputPath>
+  </PropertyGroup>
+  <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" Condition="!$(DotProducts)" />
+  
+  
+  <PropertyGroup>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <OutputType>Library</OutputType>
+    <DefineConstants>$(DefineConstants);JET_MODE_ASSERT</DefineConstants>
+    <AssemblyName>JetBrains.ForTea.TextTemplating</AssemblyName>
+    <RootNamespace>Microsoft.VisualStudio.TextTemplating</RootNamespace>
+    <ProjectGuid>{A9454D8B-A71D-4C8B-87CD-5136ABADCF47}</ProjectGuid>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Configuration Condition=" '$(Configuration)' == '' ">Default</Configuration>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <Compile Include="JetBrains\MacroResolveHelper.cs" />
+    <Compile Include="JetBrains\TextTemplatingEngineHost.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TextTransformation.cs" />
+    <Compile Include="ITextTemplatingEngineHost.cs" />
+    <Compile Include="ToStringHelper.cs" />
+    <Compile Include="AssemblyCustomAttributes.Generated.cs"/>
+  </ItemGroup>
+  
+  <ItemGroup Condition="$(DotProducts)">
+    <Reference Include="System.ComponentModel"/>
+    <Reference Include="System"/>
+  </ItemGroup>
+
+  <!--  Dotnet-Products build -->
+  <Import Project="ManagedProject.Generated.Targets" Condition="$(DotProducts)"/>
 </Project>
