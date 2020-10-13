@@ -58,7 +58,7 @@
       <HintPath>..\..\..\..\Packages\JetBrains.Annotations.2020.1.0\lib\net20\JetBrains.Annotations.dll</HintPath>
     </Reference>
     <Reference Include="JetBrains.Lifetimes, Version=777.0.0.0, Culture=neutral, PublicKeyToken=3c74c1a6a8683340">
-      <HintPath>..\..\..\..\Packages\JetBrains.Lifetimes.2020.3.0-preview416\lib\net461\JetBrains.Lifetimes.dll</HintPath>
+      <HintPath>..\..\..\..\Packages\JetBrains.Lifetimes.2020.3.0-preview427\lib\net461\JetBrains.Lifetimes.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Build" />
     <Reference Include="mscorlib">

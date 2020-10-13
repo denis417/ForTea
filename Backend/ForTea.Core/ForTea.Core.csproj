@@ -382,6 +382,22 @@
       <SubType>Designer</SubType>
     </ErrorsGen>
   </ItemGroup>
+
+  <ItemGroup><!--    <Reference Include="ErrorsGen, Version=777.0.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325">-->
+<!--      <HintPath>..\..\..\..\Bin.Plugins\ErrorsGen.exe</HintPath>-->
+<!--    </Reference>-->
+  
+    <Reference Include="ErrorsGen, Version=777.0.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325">
+      <HintPath>..\..\..\..\Bin.Plugins\ErrorsGen.exe</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Psi.Features\Tasks\CsLex\CsLex.csproj">
+      <Project>{2c3d87ed-1839-4643-b253-7b307d3ff0f6}</Project>
+      <Name>CsLex</Name>
+    </ProjectReference>
+  </ItemGroup>
   
   <!--  Independent build -->
   <Import Project="$(DotNetSdkPath)\Build\SubplatformReference.Psi.Features_src.Props" Condition="!$(DotProducts)" />
