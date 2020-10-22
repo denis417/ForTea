@@ -27,6 +27,10 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Default</Configuration>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Default|AnyCPU' ">
+    <OutputPath>bin\Default\</OutputPath>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Include="**\.cs" />
     <Compile Include="TemplateProcessing\CodeGeneration\Converters\T4CSharpRealIntermediateConverter.cs" />
@@ -99,9 +103,9 @@
   </ItemGroup>
 
   <!--  Independent build -->
-  <Import Project="$(DotNetSdkPath)\Build\SubplatformReference.ReSharperAutomationTools_src_ReSharperHost.Props" Condition="!$(DotProducts)"/>
+  <Import Project="$(DotNetSdkPath)\Build\SubplatformReference.ReSharperAutomationTools_src_ReSharperHost.Props" Condition="!$(DotProducts)" />
 
   <!--  Dotnet-Products build -->
-  <Import Project="ManagedProject.Generated.Targets" Condition="$(DotProducts)"/>
+  <Import Project="ManagedProject.Generated.Targets" Condition="$(DotProducts)" />
   
 </Project>

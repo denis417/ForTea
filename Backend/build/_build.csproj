@@ -8,10 +8,11 @@
   </PropertyGroup>
   
   <Target Name="Build" Condition="$(DotProducts)" />
-  <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" Condition="!$(DotProducts)" />
+  <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
   
   <PropertyGroup>
     <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <RootNamespace></RootNamespace>
     <IsPackable>False</IsPackable>
@@ -22,7 +23,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Default</Configuration>
   </PropertyGroup>
 
-  <ItemGroup Condition="!$(DotProducts)">
+  <ItemGroup>
     <PackageReference Include="NuGet.CommandLine" Version="4.9.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
@@ -50,28 +51,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="**\.cs" />
-    <Compile Include="ForTeaBuild.cs" />
+<!--    <Compile Include="ForTeaBuild.cs" />-->
   </ItemGroup>
   
-  <ItemGroup Condition="$(DotProducts)">
-    <Reference Include="JetBrains.Annotations, Version=2020.1.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325">
-      <HintPath>..\..\..\..\Packages\JetBrains.Annotations.2020.1.0\lib\net20\JetBrains.Annotations.dll</HintPath>
-    </Reference>
-    <Reference Include="JetBrains.Lifetimes, Version=777.0.0.0, Culture=neutral, PublicKeyToken=3c74c1a6a8683340">
-      <HintPath>..\..\..\..\Packages\JetBrains.Lifetimes.2020.3.0-preview427\lib\net461\JetBrains.Lifetimes.dll</HintPath>
-    </Reference>
+  <ItemGroup>
+    <Reference Include="JetBrains.Annotations, Version=2020.1.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325"/>
+    <Reference Include="JetBrains.Lifetimes, Version=777.0.0.0, Culture=neutral, PublicKeyToken=3c74c1a6a8683340"/>
     <Reference Include="Microsoft.Build" />
-    <Reference Include="mscorlib">
-      <HintPath>..\..\..\..\Obj/Obj.Plugins/Toolset.Prj/MNETFRRE.ASS/build/.NETFramework/v4.6.1/mscorlib.dll</HintPath>
-    </Reference>
+    <Reference Include="mscorlib"/>
     <Reference Include="NuGet, Version=4.9.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
-      <HintPath>..\..\..\..\..\..\.local\share\JetBrains\Transient\Shared\vAny\NugetLocalRestore\NuGet.CommandLine.4.9.4\tools\NuGet.exe</HintPath>
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </Reference>
-    <Reference Include="Nuke.Common, Version=0.23.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\..\..\..\..\..\.local\share\JetBrains\Transient\Shared\vAny\NugetLocalRestore\Nuke.Common.0.23.4\lib\net472\Nuke.Common.dll</HintPath>
-    </Reference>
+    <Reference Include="Nuke.Common, Version=0.23.0.0, Culture=neutral, PublicKeyToken=null"/>
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
@@ -80,5 +72,5 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.ComponentModel" />
   </ItemGroup>
-  <Import Project="ManagedProject.Generated.Targets" Condition="$(DotProducts)"/>
+  <Import Project="ManagedProject.Generated.Targets" Condition="Exists('ManagedProject.Generated.Targets')"/>
 </Project>

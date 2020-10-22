@@ -26,6 +26,10 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <Configuration Condition=" '$(Configuration)' == '' ">Default</Configuration>
   </PropertyGroup>
+  
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Default|AnyCPU' ">
+    <OutputPath>bin\Default\</OutputPath>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="**\.cs" />
     <Compile Include="Daemon\Stages\T4CSharpHighlightingStage.cs" />

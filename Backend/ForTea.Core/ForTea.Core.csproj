@@ -1,37 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  
-  <!-- Dotnet-Products build -->
-  <PropertyGroup Condition="Exists('ManagedProject.Generated.Targets')">
-    <DotProducts>true</DotProducts>
-  </PropertyGroup>
-  <Target Name="Build" Condition="$(DotProducts)" />
-
-  <!-- Independent build -->
-  <PropertyGroup Condition="!Exists('ManagedProject.Generated.Targets')">
-    <DotProducts>false</DotProducts>
-    <LangVersion>latest</LangVersion>
-    <OutputPath>..\output\ForTea.Core\$(Configuration)</OutputPath>
-  </PropertyGroup>
-  <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" Condition="!$(DotProducts)" />
-
-  <!-- Common -->
+<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <DefineConstants>$(DefineConstants);JET_MODE_ASSERT</DefineConstants>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <OutputType>Library</OutputType>
     <AssemblyName>JetBrains.ForTea.Core</AssemblyName>
+    <LangVersion>latest</LangVersion>
     <RootNamespace>GammaJul.ForTea.Core</RootNamespace>
     <ProjectGuid>{25D5E279-923F-40CC-BEC2-33A7A8CBAA0F}</ProjectGuid>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <Configuration Condition=" '$(Configuration)' == '' ">Default</Configuration>
   </PropertyGroup>
   
-  <ItemGroup Condition="$(DotProducts)">
-    <Reference Include="JetBrains.Annotations, Version=2020.1.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325">
-      <HintPath>..\..\..\..\Packages\JetBrains.Annotations.2020.1.0\lib\net20\JetBrains.Annotations.dll</HintPath>
-    </Reference>
+  <ItemGroup>
+    <Reference Include="JetBrains.Annotations, Version=2020.1.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325"/>
   </ItemGroup>
   
   <ItemGroup>
@@ -383,27 +366,12 @@
     </ErrorsGen>
   </ItemGroup>
 
-  <ItemGroup><!--    <Reference Include="ErrorsGen, Version=777.0.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325">-->
-<!--      <HintPath>..\..\..\..\Bin.Plugins\ErrorsGen.exe</HintPath>-->
-<!--    </Reference>-->
-  
-    <Reference Include="ErrorsGen, Version=777.0.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325">
-      <HintPath>..\..\..\..\Bin.Plugins\ErrorsGen.exe</HintPath>
-    </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Psi.Features\Tasks\CsLex\CsLex.csproj">
-      <Project>{2c3d87ed-1839-4643-b253-7b307d3ff0f6}</Project>
-      <Name>CsLex</Name>
-    </ProjectReference>
-  </ItemGroup>
   
   <!--  Independent build -->
-  <Import Project="$(DotNetSdkPath)\Build\SubplatformReference.Psi.Features_src.Props" Condition="!$(DotProducts)" />
-  <Import Project="$(DotNetSdkPath)\Build\SubplatformReference.Psi.Features_Web_Core.Props" Condition="!$(DotProducts)" />
+  <Import Project="$(DotNetSdkPath)\Build\SubplatformReference.Psi.Features_src.Props" Condition="Exists('$(DotNetSdkPath)\Build\SubplatformReference.Psi.Features_src.Props')" />
+  <Import Project="$(DotNetSdkPath)\Build\SubplatformReference.Psi.Features_Web_Core.Props" Condition="Exists('$(DotNetSdkPath)\Build\SubplatformReference.Psi.Features_Web_Core.Props')" />
 
   <!--  Dotnet-Products build -->
-  <Import Project="ManagedProject.Generated.Targets" Condition="$(DotProducts)" />
+  <Import Project="ManagedProject.Generated.Targets" Condition="Exists('ManagedProject.Generated.Targets')" />
   
 </Project>
