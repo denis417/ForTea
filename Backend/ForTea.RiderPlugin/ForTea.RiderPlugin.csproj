@@ -1,6 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project Sdk="Microsoft.NET.Sdk">
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition="Exists('ManagedProject.Generated.Targets')">
+    <DotProd>true</DotProd>
+  </PropertyGroup>
+  <PropertyGroup Condition="$(DotProd) == ''">
+    <DotProd Condition="$(DotProd) == ''">False</DotProd>
+  </PropertyGroup>
+
+  <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.props" Condition="!$(DotProd)" />
+  
   <PropertyGroup>
+    <DotProd Condition="'$(DotProd)' == ''">False</DotProd>
     <TargetFramework>net461</TargetFramework>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
@@ -8,10 +18,36 @@
     <OutputPath>..\output\ForTea.RiderPlugin\$(Configuration)</OutputPath>
     <LangVersion>latest</LangVersion>
     <RootNamespace>JetBrains.ForTea.RiderPlugin</RootNamespace>
+    <AssemblyName>JetBrains.ForTea.RiderPlugin</AssemblyName>
+    <OutputType>Library</OutputType>
+    <ProjectGuid>{EC8FB3E8-EE77-4F66-B0C1-48A8BE6BA593}</ProjectGuid>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
   </PropertyGroup>
+  
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <Compile Include="**\*.cs" />
+    <Compile Remove="obj\**" />
+    <None Remove="obj\**" />
+  </ItemGroup>
+  
   <Import Project="$(DotNetSdkPath)\Build\SubplatformReference.ReSharperAutomationTools_src_ReSharperHost.Props" Condition="Exists('$(DotNetSdkPath)\Build\SubplatformReference.ReSharperAutomationTools_src_ReSharperHost.Props')" />
   <ItemGroup>
     <ProjectReference Include="..\ForTea.Core\ForTea.Core.csproj" />
     <ProjectReference Include="..\JetBrains.TextTemplating\JetBrains.TextTemplating.csproj" />
+    
+    <Reference Include="System.Core" />
+    <Reference Include="System" />
+    <Reference Include="System.Threading" />
+    <Reference Include="System.Threading.Tasks" />
   </ItemGroup>
+
+  <Import Project="ManagedProject.Generated.Targets" Condition="$(DotProd)" />
+  <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.targets" Condition="!$(DotProd)" />
 </Project>

@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition="Exists('ManagedProject.Generated.Targets')">
+    <DotProd>true</DotProd>
+  </PropertyGroup>
+  <PropertyGroup Condition="$(DotProd) == ''">
+    <DotProd Condition="$(DotProd) == ''">False</DotProd>
+  </PropertyGroup>
+
+  <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.props" Condition="!$(DotProd)" />
+
+  <PropertyGroup>
+    <TargetFramework>net461</TargetFramework>
+    <AssemblyName>JetBrains.ForTea.Tests</AssemblyName>
+    <RootNamespace>JetBrains.ForTea.Tests</RootNamespace>
+    <LangVersion>latest</LangVersion>
+    <JetTestProject>true</JetTestProject>
+    <ProjectGuid>{634641F3-22E3-4D6A-AD85-75D32928D0BB}</ProjectGuid>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="data\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ForTea.Core\ForTea.Core.csproj" />
+    <ProjectReference Include="..\ForTea.RiderPlugin\ForTea.RiderPlugin.csproj" />
+    
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Remove="data\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="**/*.cs" />
+    <None Remove="data\**" />
+  </ItemGroup>
+  <Import Project="$(DotNetSdkPath)\Build\SubplatformReference.Platform_Sdk.Props" Condition="Exists('$(DotNetSdkPath)\Build\SubplatformReference.Platform_Sdk.Props')" />
+  <Import Project="$(DotNetSdkPath)\Build\SubplatformReference.ReSharperAutomationTools_src_ReSharperHost.Props" Condition="Exists('$(DotNetSdkPath)\Build\SubplatformReference.ReSharperAutomationTools_src_ReSharperHost.Props')" />
+  <Import Project="$(DotNetSdkPath)\Build\SubplatformReference.Psi.Features_test_Framework.Props" Condition="Exists('$(DotNetSdkPath)\Build\SubplatformReference.Psi.Features_test_Framework.Props')" />
+
+  <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.targets" Condition="!$(DotProd)" />
+</Project>

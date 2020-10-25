@@ -1,6 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project Sdk="Microsoft.NET.Sdk">
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition="Exists('ManagedProject.Generated.Targets')">
+    <DotProd>true</DotProd>
+  </PropertyGroup>
+  <PropertyGroup Condition="$(DotProd) == ''">
+    <DotProd Condition="$(DotProd) == ''">False</DotProd>
+  </PropertyGroup>
+
+  <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.props" Condition="!$(DotProd)" />
+
   <PropertyGroup>
+    <DotProd Condition="'$(DotProd)' == ''">False</DotProd>
     <TargetFramework>net461</TargetFramework>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <DefineConstants>$(DefineConstants);JET_MODE_ASSERT</DefineConstants>
@@ -8,5 +18,26 @@
     <OutputPath>..\output\JetBrains.TextTemplating\$(Configuration)</OutputPath>
     <LangVersion>latest</LangVersion>
     <RootNamespace>Microsoft.VisualStudio.TextTemplating</RootNamespace>
+    <ProjectGuid>{7EA33558-CC90-43C5-B807-45DB2C55184A}</ProjectGuid>
+    <AssemblyName>Microsoft.VisualStudio.TextTemplating</AssemblyName>
+    <OutputType>Library</OutputType>
   </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="**/*.cs" />
+  </ItemGroup>
+
+  <Import Project="ManagedProject.Generated.Targets" Condition="$(DotProd)" />
+  <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.targets" Condition="!$(DotProd)" />
 </Project>

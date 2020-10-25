@@ -1,18 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Project Sdk="Microsoft.NET.Sdk">
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition="Exists('ManagedProject.Generated.Targets')">
+    <DotProd>true</DotProd>
+  </PropertyGroup>
+  <PropertyGroup Condition="$(DotProd) == ''">
+    <DotProd Condition="$(DotProd) == ''">False</DotProd>
+  </PropertyGroup>
+
+  <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.props" Condition="!$(DotProd)" />
+
   <PropertyGroup>
     <TargetFramework>net461</TargetFramework>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <DefineConstants>$(DefineConstants);JET_MODE_ASSERT</DefineConstants>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <OutputType>Library</OutputType>
     <OutputPath>..\output\ForTea.Core\$(Configuration)</OutputPath>
+    <AssemblyName>JetBrains.ForTea.Core</AssemblyName>
     <LangVersion>latest</LangVersion>
+    <ProjectGuid>{25D5E279-923F-40CC-BEC2-33A7A8CBAA0F}</ProjectGuid>
     <RootNamespace>GammaJul.ForTea.Core</RootNamespace>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
   </PropertyGroup>
   <Import Project="$(DotNetSdkPath)\Build\SubplatformReference.Psi.Features_src.Props" Condition="Exists('$(DotNetSdkPath)\Build\SubplatformReference.Psi.Features_src.Props')" />
   <Import Project="$(DotNetSdkPath)\Build\SubplatformReference.Psi.Features_Web_Core.Props" Condition="Exists('$(DotNetSdkPath)\Build\SubplatformReference.Psi.Features_Web_Core.Props')" />
 
   <ItemGroup>
+    <Compile Include="**/*.cs" />
     <Compile Remove="Resources\TemplateBaseStub.cs" />
     <Compile Remove="Resources\TemplateBaseFull.cs" />
     <Compile Remove="Resources\TemplateBaseFullExecutableSuffix.cs" />
@@ -21,6 +43,8 @@
     <Compile Remove="Resources\Host.cs" />
     <Compile Remove="Resources\AssemblyRegistering.cs" />
     <Compile Remove="Resources\ToStringInstanceHelper.cs" />
+    <Compile Remove="obj\**" />
+    <None Remove="obj\**" />
 
     <EmbeddedResource Include="Resources\TemplateBaseFull.cs" />
     <EmbeddedResource Include="Resources\TemplateBaseFullExecutableSuffix.cs" />
@@ -85,4 +109,16 @@
       <SubType>Designer</SubType>
     </ErrorsGen>
   </ItemGroup>
+
+  <ItemGroup Condition="$(DotProd)">
+    <None Include="packages.config" />
+  </ItemGroup>
+
+  <ItemGroup>
+        <Reference Include="System" />
+        <Reference Include="System.Core" />
+  </ItemGroup>
+  
+  <Import Project="ManagedProject.Generated.Targets" Condition="$(DotProd)" />
+  <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.targets" Condition="!$(DotProd)" />
 </Project>
