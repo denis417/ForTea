@@ -21,6 +21,7 @@
     <ProjectGuid>{7EA33558-CC90-43C5-B807-45DB2C55184A}</ProjectGuid>
     <AssemblyName>Microsoft.VisualStudio.TextTemplating</AssemblyName>
     <OutputType>Library</OutputType>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">

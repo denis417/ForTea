@@ -16,6 +16,7 @@
     <LangVersion>latest</LangVersion>
     <JetTestProject>true</JetTestProject>
     <ProjectGuid>{634641F3-22E3-4D6A-AD85-75D32928D0BB}</ProjectGuid>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="data\**" />
